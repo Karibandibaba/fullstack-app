@@ -7,13 +7,11 @@ from sqlalchemy.orm import sessionmaker
 from datetime import datetime
 from typing import List, Optional
 
-# Database setup
 DATABASE_URL = "sqlite:///./items.db"
 engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
 
-# DB Model (this becomes your database table)
 class ItemDB(Base):
     __tablename__ = "items"
     id          = Column(Integer, primary_key=True, index=True)
@@ -23,7 +21,6 @@ class ItemDB(Base):
 
 Base.metadata.create_all(bind=engine)  # creates items.db file automatically
 
-# Pydantic schemas (for request/response validation)
 class ItemCreate(BaseModel):
     name: str
     description: Optional[str] = None
@@ -37,7 +34,6 @@ class ItemResponse(BaseModel):
     class Config:
         from_attributes = True
 
-# Create the FastAPI app
 app = FastAPI(title="Items API", version="1.0.0")
 
 # Allow frontend to talk to backend (CORS)
